@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title></title>
+
+    <link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Payment</a>
+</nav>
+
+<main role="main" class="container">
+
+    <div class="starter-template">
+        
+        <h2>
+             <span th:text="'Status : ' + ${status}"></span>
+             
+        </h2>
+        <h2>
+        <span th:text="${failure_code==null?'':'Failur Code : '+failure_code}"></span>
+        </h2>
+        <h2>
+        <span th:text="${transaction==null?'':'Transaction ID : '+transaction}"></span>
+        </h2>
+    </div>
+
+  
+</main>
+
+</body>
+</html>

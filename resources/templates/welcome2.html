@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Payment</title>
+
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/examples.css}">
+  <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+<script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v9.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Payment</a>
+</nav>
+
+<main role="main" class="container">
+
+    <div class="starter-template">
+        <h1>Payment Methods</h1>
+       
+    </div>
+<input type="hidden" th:value="${amount}" id="amt" />
+    <!--  <ol>
+        <li th:each="task : ${tasks}" th:text="${task}"></li>
+    </ol> -->
+
+</main>
+<div id="fb-root"></div>
+      
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat" 
+        attribution=setup_tool
+        page_id="103142211758974" theme_color="#0084FF">
+      </div>
+
+<!-- /.container -->
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+
+<!--<form name="checkoutForm" method="GET" action="/charges">
+
+      <script type="text/javascript" src="https://cdn.omise.co/omise.js"
+              data-key="pkey_test_5mtdjv4lhbkkdxdo858"
+              data-image="https://cdn.omise.co/assets/dashboard/images/omise-logo.png"
+              data-amount="99500"
+              data-currency="thb"
+              data-button-label="Pay now"
+              data-frame-label="Example 1"
+              data-submit-label="Checkout">
+      </script>
+    </form> -->
+     <div class="form">
+
+    
+
+ <form name="checkoutForm" method="POST" action="/charges">
+     
+      <button type="submit" id="checkout-button-1">Credit/Debit Card</button> <br/><br/>
+     
+    </form>
+ 
+     
+     <form name="checkoutForm" method="POST" action="/internetBanking">
+      <button type="submit" id="checkout-button-2" onclick="internetBanking();">Internet Banking</button>
+    </form>
+    
+    
+    <form name="myRedirectForm" action="https://demo2.2c2p.com/2C2PFrontEnd/RedirectV3/payment" method="post">
+    <input name="version" type="hidden" id="version"  />
+    <input name="merchant_id" type="hidden" id="merchant_id" />
+    <input name="currency" type="hidden" id="currency" />
+    <input name="result_url_1" type="hidden" id="result_url_1" />
+    <input name="hash_value" type="hidden" id="hash_value" />
+    <input name="payment_description" type="hidden" id="payment_description" />
+    <input name="order_id" type="hidden" id="order_id" />
+     <input name="amount" id="amount" type="text">
+        <input type="submit" value="pay" onclick="sethmac()" />
+
+</form>
+    <script type="text/javascript">
+
+   $(document).ready(function() {
+            document.myRedirectForm.submit();
+        });
+        
+function sethmac(){
+
+debugger;
+var version=8.5;
+var merchantid="JT04";
+var paymentDescription="Payment to sample shb";
+var orderid=moment().format('DDMMYYHHmm');
+var currency="764";
+var amount=document.getElementById("amount").value;
+var resultURL="http://localhost:8080/response";
+
+document.getElementById("version").value=version;
+document.getElementById("merchant_id").value=merchantid;
+document.getElementById("payment_description").value=paymentDescription;
+document.getElementById("order_id").value=orderid;
+document.getElementById("currency").value=currency;
+document.getElementById("result_url_1").value=resultURL;
+
+
+alert(document.getElementById("amount").value);
+var finalResult=version+merchantid+paymentDescription+orderid+currency+amount+resultURL;
+
+var hash = CryptoJS.HmacSHA256(finalResult, "QnmrnH6QE23N");
+var output = hash.toString(CryptoJS.enc.Hex);
+
+document.getElementById("hash_value").value=output;
+alert(document.getElementById("hash_value").value);
+}
+
+
+    </script>
+  </div>
+
+  <!-- Include card.js library -->
+  <script type="text/javascript" src="https://cdn.omise.co/omise.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+ <script type="text/javascript" src="https://momentjs.com/downloads/moment.js" />
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+  <!-- Config the card.js library -->
+  <script type="text/javascript">
+  
+    // Set default parameters
+    OmiseCard.configure({
+      publicKey: 'pkey_test_5mtdjv4lhbkkdxdo858',
+      image: 'https://cdn.omise.co/assets/dashboard/images/omise-logo.png',
+      amount: document.getElementById("amt").value
+    });
+
+    // Configuring your own custom button
+    
+    OmiseCard.configureButton('#checkout-button-1', {
+      frameLabel: 'Shopee',
+      submitLabel: 'PAY RIGHT NOW !',
+    });
+
+    // Then, attach all of the config and initiate it by 'OmiseCard.attach();' method
+    OmiseCard.attach();
+    
+    
+    //Internet Banking
+    
+    Omise.setPublicKey('pkey_test_5mtdjv4lhbkkdxdo858');
+function internetBanking(){
+Omise.createSource('internet_banking_bay', {
+  "amount": 400000,
+  "currency": "THB"
+}, function(statusCode, response) {
+  console.log(response)
+});
+}
+  </script>
+</body>
+</html>
